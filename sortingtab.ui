@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>sortingTab</class>
+ <widget class="QWidget" name="sortingTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="SortingLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="selectedSortingAlgorithmLabel">
+         <property name="text">
+          <string>Selected Sorting Algorithm:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="selectedSortingAlgorithmComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string>QuickSort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>MergeSort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Bubble Sort</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="numberOfItemsLabel">
+         <property name="text">
+          <string>Number of items:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="numberOfItemsSpinBox">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="backgroundColorButton">
+         <property name="text">
+          <string>Background Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="columnColorButton">
+         <property name="text">
+          <string>Column Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="highlightColorButton">
+         <property name="text">
+          <string>Highlight Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetColorsButton">
+         <property name="text">
+          <string>Reset Colors</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="shuffleButton">
+         <property name="text">
+          <string>Shuffle</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="runSortingAlgorithmButton">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Run</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="sortingGraphicsView"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
