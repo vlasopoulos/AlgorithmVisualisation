@@ -196,7 +196,17 @@ void sortingTab::generateRandomDistribution()
     }
     render();
 }
+
+void sortingTab::on_pushButton_clicked()
+{
+    QImage img(sortingScene->width(),sortingScene->height(),QImage::Format_RGB16);
+    QPainter painter(&img);
+    ui->sortingGraphicsView->render(&painter);
+    img.save("images/image.png");
+}
+
 //SORTING
+
 void sortingTab::swap(int *a, int *b)
 {
     int t = std::move(*a);
@@ -315,6 +325,3 @@ void sortingTab::bubbleSort(int* arr, const int n)
         }
     }
 }
-
-
-

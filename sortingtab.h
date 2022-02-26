@@ -7,6 +7,7 @@
 #include <QGraphicsItem>
 #include <QEventLoop>
 #include <QColorDialog>
+#include <QImage>
 #include <algorithm>
 #include <random>
 #include <iterator>
@@ -34,8 +35,9 @@ private slots:
     void on_columnColorButton_clicked();
     void on_highlightColorButton_clicked();
     void on_resetColorsButton_clicked();
-
     void on_distributionComboBox_activated(const int index);
+
+    void on_pushButton_clicked();
 
 signals:
     void windowResizedSignal();
