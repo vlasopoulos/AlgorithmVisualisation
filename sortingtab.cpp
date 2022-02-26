@@ -195,7 +195,7 @@ int sortingTab::quickSortPartition(int *arr, int low, int high)
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
             render(j);
             l->processEvents();
-            if (currentNumberOfItems < 250) _sleep(20);
+            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
     }
     swap(&arr[i + 1], &arr[high]);
@@ -249,7 +249,7 @@ void sortingTab::merge(int *array, int low, int mid, int high)
         std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
         render(k+low);
         l->processEvents();
-        if (currentNumberOfItems < 250) _sleep(20);
+        if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     delete[] temp;
 }
@@ -284,7 +284,7 @@ void sortingTab::bubbleSort(int* arr, int n)
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
             render(j);
             l->processEvents();
-            if (currentNumberOfItems < 250) _sleep(10);
+            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
 }

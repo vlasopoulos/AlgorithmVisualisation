@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <random>
 #include <iterator>
+#include <chrono>
+#include <thread>
 
 namespace Ui {
 class sortingTab;
