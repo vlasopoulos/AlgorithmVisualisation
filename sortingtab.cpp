@@ -27,7 +27,7 @@ sortingTab::~sortingTab()
     delete ui;
 }
 
-void sortingTab::renderData(int* items, int numberOfItems, int green)
+void sortingTab::renderData(const int* items,const int numberOfItems,const int green) const
 {
     sortingScene->clear();
     QBrush backgroundBrush(backgroundColor);
@@ -48,9 +48,9 @@ void sortingTab::renderData(int* items, int numberOfItems, int green)
     }
 }
 
-void sortingTab::render() { renderData(numbers, currentNumberOfItems); }
+void sortingTab::render() const { renderData(numbers, currentNumberOfItems); }
 
-void sortingTab::render(int green) { renderData(numbers, currentNumberOfItems, green); }
+void sortingTab::render(const int green) const { renderData(numbers, currentNumberOfItems, green); }
 
 void sortingTab::resizeEvent(QResizeEvent *event)
 {
@@ -58,7 +58,7 @@ void sortingTab::resizeEvent(QResizeEvent *event)
     emit windowResizedSlot();
 }
 
-void sortingTab::shuffleNumbers()
+void sortingTab::shuffleNumbers() const
 {
     std::shuffle(&numbers[0],&numbers[currentNumberOfItems],std::mt19937{std::random_device{}()});
     render();
@@ -86,13 +86,13 @@ void sortingTab::on_runSortingAlgorithmButton_clicked()
     render();
 }
 
-void sortingTab::windowResizedSlot()
+void sortingTab::windowResizedSlot() const
 {
     sortingScene->setSceneRect(5,5,ui->sortingGraphicsView->size().width()-5,ui->sortingGraphicsView->size().height()-5);
     render();
 }
 
-void sortingTab::on_numberOfItemsSpinBox_valueChanged(int arg1)
+void sortingTab::on_numberOfItemsSpinBox_valueChanged(const int arg1)
 {
     if(currentNumberOfItems!=arg1){
         currentNumberOfItems = arg1;
@@ -105,7 +105,7 @@ void sortingTab::on_numberOfItemsSpinBox_valueChanged(int arg1)
     }
 }
 
-void sortingTab::on_shuffleButton_clicked()
+void sortingTab::on_shuffleButton_clicked() const
 {
     shuffleNumbers();
 }
@@ -172,14 +172,14 @@ QColor sortingTab::getIdealTextColor(const QColor& rBackgroundColor) const
 //SORTING
 void sortingTab::swap(int *a, int *b)
 {
-    int t = *a;
-    *a = *b;
-    *b = t;
+    int t = std::move(*a);
+    *a = std::move(*b);
+    *b = std::move(t);
 }
 
 //QUICKSORT
 
-int sortingTab::quickSortPartition(int *arr, int low, int high)
+int sortingTab::quickSortPartition(int *arr, const int low, const int high)
 {
     int pivot = arr[high]; // pivot
     int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
@@ -195,7 +195,7 @@ int sortingTab::quickSortPartition(int *arr, int low, int high)
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
             render(j);
             l->processEvents();
-            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
     swap(&arr[i + 1], &arr[high]);
@@ -207,7 +207,7 @@ int sortingTab::quickSortPartition(int *arr, int low, int high)
     return (i + 1);
 }
 
-void sortingTab::quickSort(int *arr, int low, int high)
+void sortingTab::quickSort(int *arr, const int low, const int high)
 {
     if (low < high)
        {
@@ -223,7 +223,7 @@ void sortingTab::quickSort(int *arr, int low, int high)
 
 //MERGESORT
 
-void sortingTab::merge(int *array, int low, int mid, int high)
+void sortingTab::merge(int *array, const int low, const int mid, const int high)
 {
     int *temp = new int[high + 1];
     int i = low;
@@ -249,12 +249,12 @@ void sortingTab::merge(int *array, int low, int mid, int high)
         std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
         render(k+low);
         l->processEvents();
-        if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     delete[] temp;
 }
 
-void sortingTab::mergeSort(int *array, int low, int high)
+void sortingTab::mergeSort(int *array, const int low, const int high)
 {
     int mid;
 
@@ -272,7 +272,7 @@ void sortingTab::mergeSort(int *array, int low, int high)
 
 //BUBBLESORT
 
-void sortingTab::bubbleSort(int* arr, int n)
+void sortingTab::bubbleSort(int* arr, const int n)
 {
     int i, j;
     for (i = 0; i < n-1; i++)
