@@ -88,37 +88,24 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="backgroundColorButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Background Color</string>
+          <string>Distribution:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="columnColorButton">
-         <property name="text">
-          <string>Column Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="highlightColorButton">
-         <property name="text">
-          <string>Highlight Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="resetColorsButton">
-         <property name="text">
-          <string>Reset Colors</string>
-         </property>
+        <widget class="QComboBox" name="distributionComboBox">
+         <item>
+          <property name="text">
+           <string>Linear</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
@@ -157,6 +144,64 @@
           <string>Run</string>
          </property>
         </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="backgroundColorButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Background Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="columnColorButton">
+         <property name="text">
+          <string>Column Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="highlightColorButton">
+         <property name="text">
+          <string>Highlight Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetColorsButton">
+         <property name="text">
+          <string>Reset Colors</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

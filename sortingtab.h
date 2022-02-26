@@ -35,6 +35,8 @@ private slots:
     void on_highlightColorButton_clicked();
     void on_resetColorsButton_clicked();
 
+    void on_distributionComboBox_activated(const int index);
+
 signals:
     void windowResizedSignal();
 
@@ -47,6 +49,8 @@ private:
     void resizeEvent(QResizeEvent *event);
     void shuffleNumbers() const;
     QColor getIdealTextColor(const QColor& rBackgroundColor) const;
+    void generateLinearDistribution();
+    void generateRandomDistribution();
     //sorting
     void swap(int *a, int *b);
     int quickSortPartition(int *arr, const int low, const int high);
@@ -57,6 +61,7 @@ private:
     //variables
     int currentNumberOfItems;
     int* numbers = nullptr;
+    int distributionType = 0; //0=linear, 1=random
     QColor backgroundColor=Qt::black;;
     QColor columnColor=Qt::blue;;
     QColor highlightColor=Qt::green;

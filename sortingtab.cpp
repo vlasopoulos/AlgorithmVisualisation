@@ -15,11 +15,8 @@ sortingTab::sortingTab(QWidget *parent) :
     ui->highlightColorButton->setStyleSheet("QPushButton { background-color : #00ff00; color : #000000; }");
 
     currentNumberOfItems = 100;
-    numbers = new int[100];
-    for (int i=0; i<100; i++) {
-        numbers[i]=i+1;
-    }
-    shuffleNumbers();
+    numbers = new int[currentNumberOfItems];
+    generateLinearDistribution();
 }
 
 sortingTab::~sortingTab()
@@ -98,10 +95,8 @@ void sortingTab::on_numberOfItemsSpinBox_valueChanged(const int arg1)
         currentNumberOfItems = arg1;
         if (numbers) delete[] numbers;
         numbers = new int[currentNumberOfItems];
-        for (int i=0; i<currentNumberOfItems; i++) {
-            numbers[i]=i+1;
-        }
-        shuffleNumbers();
+        if (distributionType==0) generateLinearDistribution();
+        else if (distributionType==1) generateRandomDistribution();
     }
 }
 
@@ -169,6 +164,38 @@ QColor sortingTab::getIdealTextColor(const QColor& rBackgroundColor) const
     return QColor((255- BackgroundDelta < THRESHOLD) ? Qt::black : Qt::white);
 }
 
+void sortingTab::on_distributionComboBox_activated(const int index)
+{
+    distributionType = index;
+    switch (index) {
+        case 0:
+            generateLinearDistribution();
+        break;
+        case 1:
+            generateRandomDistribution();
+        break;
+
+    }
+}
+
+void sortingTab::generateLinearDistribution()
+{
+    for (int i=0 ; i<currentNumberOfItems ; i++) {
+        numbers[i]=i+1;
+    }
+    shuffleNumbers();
+}
+
+void sortingTab::generateRandomDistribution()
+{
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distr(1,currentNumberOfItems);
+    for (int i=0 ; i<currentNumberOfItems ; i++) {
+        numbers[i] = distr(rng);
+    }
+    render();
+}
 //SORTING
 void sortingTab::swap(int *a, int *b)
 {
@@ -288,3 +315,6 @@ void sortingTab::bubbleSort(int* arr, const int n)
         }
     }
 }
+
+
+
