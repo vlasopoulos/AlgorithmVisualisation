@@ -40,7 +40,7 @@ void sortingTab::renderData(const int* items,const int numberOfItems,const int g
         {
             outlinePen.setColor(highlightColor);
         }
-        sortingScene->addLine(penWidth*(i+1) + 10, items[i] * ySize/numberOfItems + 10, penWidth*(i+1) + 10, ui->sortingGraphicsView->size().height() - 10, outlinePen);
+        sortingScene->addLine(penWidth*(i+1) + 10, ui->sortingGraphicsView->height() - items[i] * ySize/numberOfItems - 10, penWidth*(i+1) + 10, ui->sortingGraphicsView->size().height() - 10, outlinePen);
         outlinePen.setColor(columnColor);
     }
 //    on_pushButton_clicked();
