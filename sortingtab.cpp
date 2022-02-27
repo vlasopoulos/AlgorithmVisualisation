@@ -85,6 +85,9 @@ void sortingTab::on_runSortingAlgorithmButton_clicked()
         case 5:
             radixSort(numbers,currentNumberOfItems);
         break;
+        case 6:
+            cocktailSort(numbers,currentNumberOfItems);
+        break;
     }
     qInfo() << "done";
 
@@ -332,14 +335,13 @@ void sortingTab::bubbleSort(int* arr, const int n)
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
             render(j);
             l->processEvents();
-            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
 }
 
 //SELECTIONSORT
 
-void sortingTab::selectionSort(int* arr, int n)
+void sortingTab::selectionSort(int* arr, const int n)
 {
     int i, j, min_idx;
 
@@ -363,7 +365,7 @@ void sortingTab::selectionSort(int* arr, int n)
 
 //INSERSTIONSORT
 
-void sortingTab::insertionSort(int* arr, int n)
+void sortingTab::insertionSort(int* arr, const int n)
 {
     int i, key, j;
     for (i = 1; i < n; i++)
@@ -391,7 +393,7 @@ void sortingTab::insertionSort(int* arr, int n)
 
 // A function to do counting sort of arr[] according to
 // the digit represented by exp.
-void sortingTab::countSort(int* arr, int n, int exp)
+void sortingTab::countSort(int* arr, const int n, const int exp)
 {
     int output[n]; // output array
     int i, count[10] = { 0 };
@@ -426,7 +428,7 @@ void sortingTab::countSort(int* arr, int n, int exp)
 
 // The main function to that sorts arr[] of size n using
 // Radix Sort
-void sortingTab::radixSort(int* arr, int n)
+void sortingTab::radixSort(int* arr, const int n)
 {
     // Find the maximum number to know number of digits
     int m = *std::max_element(arr, arr+n);
@@ -436,4 +438,64 @@ void sortingTab::radixSort(int* arr, int n)
     // where i is current digit number
     for (int exp = 1; m / exp > 0; exp *= 10)
         countSort(arr, n, exp);
+}
+
+//COCKTAILSORT
+
+void sortingTab::cocktailSort(int* a, const int n)
+{
+    bool swapped = true;
+    int start = 0;
+    int end = n - 1;
+
+    while (swapped)
+    {
+        // reset the swapped flag on entering
+        // the loop, because it might be true from
+        // a previous iteration.
+        swapped = false;
+
+        // loop from left to right same as
+        // the bubble sort
+        for (int i = start; i < end; ++i)
+        {
+            if (a[i] > a[i + 1]) {
+                swap(&a[i], &a[i + 1]);
+                std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+                render(i+1);
+                l->processEvents();
+                swapped = true;
+            }
+        }
+
+        // if nothing moved, then array is sorted.
+        if (!swapped)
+            break;
+
+        // otherwise, reset the swapped flag so that it
+        // can be used in the next stage
+        swapped = false;
+
+        // move the end point back by one, because
+        // item at the end is in its rightful spot
+        --end;
+
+        // from right to left, doing the
+        // same comparison as in the previous stage
+        for (int i = end - 1; i >= start; --i)
+        {
+            if (a[i] > a[i + 1]) {
+                swap(&a[i], &a[i + 1]);
+                std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+                render(i);
+                l->processEvents();
+                swapped = true;
+            }
+        }
+
+        // increase the starting point, because
+        // the last stage would have moved the next
+        // smallest number to its rightful spot.
+        ++start;
+    }
 }
