@@ -62,6 +62,8 @@ private:
     void bubbleSort(int arr[], const int n);
     void selectionSort(int* arr, int n);
     void insertionSort(int* arr, int n);
+    void countSort(int* arr, int n, int exp);
+    void radixSort(int* arr, int n);
     //variables
     int currentNumberOfItems;
     int* numbers = nullptr;

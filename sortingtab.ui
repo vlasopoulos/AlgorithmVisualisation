@@ -35,12 +35,12 @@
          </property>
          <item>
           <property name="text">
-           <string>QuickSort</string>
+           <string>Quick Sort</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>MergeSort</string>
+           <string>Merge Sort</string>
           </property>
          </item>
          <item>
@@ -56,6 +56,11 @@
          <item>
           <property name="text">
            <string>Insertion Sort</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Radix Sort</string>
           </property>
          </item>
         </widget>
