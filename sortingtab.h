@@ -37,7 +37,7 @@ private slots:
     void on_resetColorsButton_clicked();
     void on_distributionComboBox_activated(const int index);
 
-    void on_pushButton_clicked();
+    void on_pushButton_clicked() const;
 
 signals:
     void windowResizedSignal();
@@ -66,6 +66,7 @@ private:
     int currentNumberOfItems;
     int* numbers = nullptr;
     int distributionType = 0; //0=linear, 1=random
+    mutable int currentFrame = 1;
     QColor backgroundColor=Qt::black;;
     QColor columnColor=Qt::blue;;
     QColor highlightColor=Qt::green;

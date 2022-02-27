@@ -43,6 +43,7 @@ void sortingTab::renderData(const int* items,const int numberOfItems,const int g
         sortingScene->addLine(penWidth*(i+1) + 10, items[i] * ySize/numberOfItems + 10, penWidth*(i+1) + 10, ui->sortingGraphicsView->size().height() - 10, outlinePen);
         outlinePen.setColor(columnColor);
     }
+//    on_pushButton_clicked();
 }
 
 void sortingTab::render() const { renderData(numbers, currentNumberOfItems); }
@@ -203,12 +204,13 @@ void sortingTab::generateRandomDistribution()
     render();
 }
 
-void sortingTab::on_pushButton_clicked()
+void sortingTab::on_pushButton_clicked() const
 {
     QImage img(sortingScene->width(),sortingScene->height(),QImage::Format_RGB16);
     QPainter painter(&img);
     ui->sortingGraphicsView->render(&painter);
-    img.save("images/image.png");
+    QString filename = QString("images/frame") + QString::number(currentFrame++) + QString(".png");
+    img.save(filename);
 }
 
 //SORTING
@@ -356,7 +358,7 @@ void sortingTab::selectionSort(int* arr, int n)
     }
 }
 
-//INSERSTION SORT
+//INSERSTIONSORT
 
 void sortingTab::insertionSort(int* arr, int n)
 {
