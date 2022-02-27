@@ -395,7 +395,7 @@ void sortingTab::insertionSort(int* arr, const int n)
 // the digit represented by exp.
 void sortingTab::countSort(int* arr, const int n, const int exp)
 {
-    int output[n]; // output array
+    int* output = new int[n]; // output array
     int i, count[10] = { 0 };
 
     // Store count of occurrences in count[]
