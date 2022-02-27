@@ -60,6 +60,8 @@ private:
     void merge(int *array, const int low, const int mid, const int high);
     void mergeSort(int *array, const int low, const int high);
     void bubbleSort(int arr[], const int n);
+    void selectionSort(int* arr, int n);
+    void insertionSort(int* arr, int n);
     //variables
     int currentNumberOfItems;
     int* numbers = nullptr;

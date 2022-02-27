@@ -75,6 +75,12 @@ void sortingTab::on_runSortingAlgorithmButton_clicked()
         case 2:
             bubbleSort(numbers,currentNumberOfItems);
         break;
+        case 3:
+            selectionSort(numbers,currentNumberOfItems);
+        break;
+        case 4:
+            insertionSort(numbers,currentNumberOfItems);
+        break;
     }
     qInfo() << "done";
 
@@ -323,5 +329,55 @@ void sortingTab::bubbleSort(int* arr, const int n)
             l->processEvents();
             if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
+    }
+}
+
+//SELECTIONSORT
+
+void sortingTab::selectionSort(int* arr, int n)
+{
+    int i, j, min_idx;
+
+    // One by one move boundary of unsorted subarray
+    for (i = 0; i < n-1; i++)
+    {
+        // Find the minimum element in unsorted array
+        min_idx = i;
+        for (j = i+1; j < n; j++)
+        {
+            if (arr[j] < arr[min_idx]) min_idx = j;
+        }
+        // Swap the found minimum element with the first element
+        swap(&arr[min_idx], &arr[i]);
+        std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+        render(min_idx);
+        l->processEvents();
+        if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+}
+
+//INSERSTION SORT
+
+void sortingTab::insertionSort(int* arr, int n)
+{
+    int i, key, j;
+    for (i = 1; i < n; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+
+        /* Move elements of arr[0..i-1], that are
+        greater than key, to one position ahead
+        of their current position */
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+            render(j);
+            l->processEvents();
+            if (currentNumberOfItems < 250) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            j = j - 1;
+        }
+        arr[j + 1] = key;
     }
 }
