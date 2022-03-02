@@ -22,6 +22,7 @@ SortingTab::SortingTab(QWidget *parent) :
 SortingTab::~SortingTab()
 {
     delete ui;
+    delete[] numbers;
 }
 
 void SortingTab::renderData(const int* items,const int numberOfItems,const int green) const
