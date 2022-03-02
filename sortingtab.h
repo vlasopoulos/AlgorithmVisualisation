@@ -15,16 +15,16 @@
 #include <thread>
 
 namespace Ui {
-class sortingTab;
+class SortingTab;
 }
 
-class sortingTab : public QWidget
+class SortingTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit sortingTab(QWidget *parent = nullptr);
-    ~sortingTab();
+    explicit SortingTab(QWidget *parent = nullptr);
+    ~SortingTab();
 
 private slots:
     void on_runSortingAlgorithmButton_clicked();
@@ -43,7 +43,7 @@ signals:
     void windowResizedSignal();
 
 private:
-    Ui::sortingTab *ui;
+    Ui::SortingTab *ui;
     QGraphicsScene *sortingScene;
     void renderData(const int* items,const int numberOfItems,const int green=-1) const;
     void render() const;

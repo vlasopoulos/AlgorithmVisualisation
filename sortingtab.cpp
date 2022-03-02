@@ -1,14 +1,14 @@
 #include "sortingtab.h"
 #include "ui_sortingtab.h"
 
-sortingTab::sortingTab(QWidget *parent) :
+SortingTab::SortingTab(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::sortingTab)
+    ui(new Ui::SortingTab)
 {
     ui->setupUi(this);
     sortingScene = new QGraphicsScene(this);
     ui->sortingGraphicsView->setScene(sortingScene);
-    connect(this, &sortingTab::windowResizedSignal, this, &sortingTab::windowResizedSlot);
+    connect(this, &SortingTab::windowResizedSignal, this, &SortingTab::windowResizedSlot);
 
     ui->backgroundColorButton->setStyleSheet("QPushButton { background-color : #000000; color : #ffffff; }");
     ui->columnColorButton->setStyleSheet("QPushButton { background-color : #0000ff; color : #ffffff; }");
@@ -19,12 +19,12 @@ sortingTab::sortingTab(QWidget *parent) :
     generateLinearDistribution();
 }
 
-sortingTab::~sortingTab()
+SortingTab::~SortingTab()
 {
     delete ui;
 }
 
-void sortingTab::renderData(const int* items,const int numberOfItems,const int green) const
+void SortingTab::renderData(const int* items,const int numberOfItems,const int green) const
 {
     sortingScene->clear();
     QBrush backgroundBrush(backgroundColor);
@@ -46,23 +46,23 @@ void sortingTab::renderData(const int* items,const int numberOfItems,const int g
 //    on_pushButton_clicked();
 }
 
-void sortingTab::render() const { renderData(numbers, currentNumberOfItems); }
+void SortingTab::render() const { renderData(numbers, currentNumberOfItems); }
 
-void sortingTab::render(const int green) const { renderData(numbers, currentNumberOfItems, green); }
+void SortingTab::render(const int green) const { renderData(numbers, currentNumberOfItems, green); }
 
-void sortingTab::resizeEvent(QResizeEvent *event)
+void SortingTab::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     emit windowResizedSlot();
 }
 
-void sortingTab::shuffleNumbers() const
+void SortingTab::shuffleNumbers() const
 {
     std::shuffle(&numbers[0],&numbers[currentNumberOfItems],std::mt19937{std::random_device{}()});
     render();
 }
 
-void sortingTab::on_runSortingAlgorithmButton_clicked()
+void SortingTab::on_runSortingAlgorithmButton_clicked()
 {
     ui->runSortingAlgorithmButton->setDisabled(true);
     ui->shuffleButton->setDisabled(true);
@@ -96,13 +96,13 @@ void sortingTab::on_runSortingAlgorithmButton_clicked()
     render();
 }
 
-void sortingTab::windowResizedSlot() const
+void SortingTab::windowResizedSlot() const
 {
     sortingScene->setSceneRect(5,5,ui->sortingGraphicsView->size().width()-5,ui->sortingGraphicsView->size().height()-5);
     render();
 }
 
-void sortingTab::on_numberOfItemsSpinBox_valueChanged(const int arg1)
+void SortingTab::on_numberOfItemsSpinBox_valueChanged(const int arg1)
 {
     if(currentNumberOfItems!=arg1){
         currentNumberOfItems = arg1;
@@ -113,12 +113,12 @@ void sortingTab::on_numberOfItemsSpinBox_valueChanged(const int arg1)
     }
 }
 
-void sortingTab::on_shuffleButton_clicked() const
+void SortingTab::on_shuffleButton_clicked() const
 {
     shuffleNumbers();
 }
 
-void sortingTab::on_backgroundColorButton_clicked()
+void SortingTab::on_backgroundColorButton_clicked()
 {
     QColor color = QColorDialog::getColor(Qt::black, this, "Choose Background Color");
     if (color.isValid())
@@ -132,7 +132,7 @@ void sortingTab::on_backgroundColorButton_clicked()
 }
 
 
-void sortingTab::on_columnColorButton_clicked()
+void SortingTab::on_columnColorButton_clicked()
 {
     QColor color =  QColorDialog::getColor(Qt::blue, this, "Choose Column Color");
     if (color.isValid())
@@ -146,7 +146,7 @@ void sortingTab::on_columnColorButton_clicked()
 
 }
 
-void sortingTab::on_highlightColorButton_clicked()
+void SortingTab::on_highlightColorButton_clicked()
 {
     QColor color =  QColorDialog::getColor(Qt::green, this, "Choose Highlight Color");
     if (color.isValid())
@@ -159,7 +159,7 @@ void sortingTab::on_highlightColorButton_clicked()
     }
 }
 
-void sortingTab::on_resetColorsButton_clicked()
+void SortingTab::on_resetColorsButton_clicked()
 {
     backgroundColor=Qt::black;;
     columnColor=Qt::blue;;
@@ -170,14 +170,14 @@ void sortingTab::on_resetColorsButton_clicked()
     render();
 }
 
-QColor sortingTab::getIdealTextColor(const QColor& rBackgroundColor) const
+QColor SortingTab::getIdealTextColor(const QColor& rBackgroundColor) const
 {
     const int THRESHOLD = 105;
     int BackgroundDelta = (rBackgroundColor.red() * 0.299) + (rBackgroundColor.green() * 0.587) + (rBackgroundColor.blue() * 0.114);
     return QColor((255- BackgroundDelta < THRESHOLD) ? Qt::black : Qt::white);
 }
 
-void sortingTab::on_distributionComboBox_activated(const int index)
+void SortingTab::on_distributionComboBox_activated(const int index)
 {
     distributionType = index;
     switch (index) {
@@ -191,7 +191,7 @@ void sortingTab::on_distributionComboBox_activated(const int index)
     }
 }
 
-void sortingTab::generateLinearDistribution()
+void SortingTab::generateLinearDistribution()
 {
     for (int i=0 ; i<currentNumberOfItems ; i++) {
         numbers[i]=i+1;
@@ -199,7 +199,7 @@ void sortingTab::generateLinearDistribution()
     shuffleNumbers();
 }
 
-void sortingTab::generateRandomDistribution()
+void SortingTab::generateRandomDistribution()
 {
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -210,7 +210,7 @@ void sortingTab::generateRandomDistribution()
     render();
 }
 
-void sortingTab::on_pushButton_clicked() const
+void SortingTab::on_pushButton_clicked() const
 {
     QImage img(sortingScene->width(),sortingScene->height(),QImage::Format_RGB16);
     QPainter painter(&img);
@@ -221,7 +221,7 @@ void sortingTab::on_pushButton_clicked() const
 
 //SORTING
 
-void sortingTab::swap(int *a, int *b)
+void SortingTab::swap(int *a, int *b)
 {
     int t = std::move(*a);
     *a = std::move(*b);
@@ -230,7 +230,7 @@ void sortingTab::swap(int *a, int *b)
 
 //QUICKSORT
 
-int sortingTab::quickSortPartition(int *arr, const int low, const int high)
+int SortingTab::quickSortPartition(int *arr, const int low, const int high)
 {
     int pivot = arr[high]; // pivot
     int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
@@ -258,7 +258,7 @@ int sortingTab::quickSortPartition(int *arr, const int low, const int high)
     return (i + 1);
 }
 
-void sortingTab::quickSort(int *arr, const int low, const int high)
+void SortingTab::quickSort(int *arr, const int low, const int high)
 {
     if (low < high)
        {
@@ -274,7 +274,7 @@ void sortingTab::quickSort(int *arr, const int low, const int high)
 
 //MERGESORT
 
-void sortingTab::merge(int *array, const int low, const int mid, const int high)
+void SortingTab::merge(int *array, const int low, const int mid, const int high)
 {
     int *temp = new int[high + 1];
     int i = low;
@@ -305,7 +305,7 @@ void sortingTab::merge(int *array, const int low, const int mid, const int high)
     delete[] temp;
 }
 
-void sortingTab::mergeSort(int *array, const int low, const int high)
+void SortingTab::mergeSort(int *array, const int low, const int high)
 {
     int mid;
 
@@ -323,7 +323,7 @@ void sortingTab::mergeSort(int *array, const int low, const int high)
 
 //BUBBLESORT
 
-void sortingTab::bubbleSort(int* arr, const int n)
+void SortingTab::bubbleSort(int* arr, const int n)
 {
     int i, j;
     for (i = 0; i < n-1; i++)
@@ -341,7 +341,7 @@ void sortingTab::bubbleSort(int* arr, const int n)
 
 //SELECTIONSORT
 
-void sortingTab::selectionSort(int* arr, const int n)
+void SortingTab::selectionSort(int* arr, const int n)
 {
     int i, j, min_idx;
 
@@ -365,7 +365,7 @@ void sortingTab::selectionSort(int* arr, const int n)
 
 //INSERSTIONSORT
 
-void sortingTab::insertionSort(int* arr, const int n)
+void SortingTab::insertionSort(int* arr, const int n)
 {
     int i, key, j;
     for (i = 1; i < n; i++)
@@ -393,7 +393,7 @@ void sortingTab::insertionSort(int* arr, const int n)
 
 // A function to do counting sort of arr[] according to
 // the digit represented by exp.
-void sortingTab::countSort(int* arr, const int n, const int exp)
+void SortingTab::countSort(int* arr, const int n, const int exp)
 {
     int* output = new int[n]; // output array
     int i, count[10] = { 0 };
@@ -428,7 +428,7 @@ void sortingTab::countSort(int* arr, const int n, const int exp)
 
 // The main function to that sorts arr[] of size n using
 // Radix Sort
-void sortingTab::radixSort(int* arr, const int n)
+void SortingTab::radixSort(int* arr, const int n)
 {
     // Find the maximum number to know number of digits
     int m = *std::max_element(arr, arr+n);
@@ -442,7 +442,7 @@ void sortingTab::radixSort(int* arr, const int n)
 
 //COCKTAILSORT
 
-void sortingTab::cocktailSort(int* a, const int n)
+void SortingTab::cocktailSort(int* a, const int n)
 {
     bool swapped = true;
     int start = 0;

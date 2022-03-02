@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="Sorting">
        <attribute name="title">
@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="sortingTab" name="widget" native="true"/>
+         <widget class="SortingTab" name="widget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -34,6 +34,11 @@
        <attribute name="title">
         <string>Pathfinding</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="PathfindingTab" name="widget_2" native="true"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -43,9 +48,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>sortingTab</class>
+   <class>SortingTab</class>
    <extends>QWidget</extends>
-   <header>sortingtab.h</header>
+   <header location="global">sortingtab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PathfindingTab</class>
+   <extends>QWidget</extends>
+   <header location="global">pathfindingtab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

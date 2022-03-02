@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         sortingtab.h
         sortingtab.cpp
         sortingtab.ui
+        pathfindingtab.h
+        pathfindingtab.cpp
+        pathfindingtab.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
