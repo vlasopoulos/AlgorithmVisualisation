@@ -37,7 +37,7 @@ private slots:
     void on_resetColorsButton_clicked();
     void on_distributionComboBox_activated(const int index);
 
-    void on_pushButton_clicked() const;
+//    void on_pushButton_clicked() const;
 
 signals:
     void windowResizedSignal();
