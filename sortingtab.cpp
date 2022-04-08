@@ -53,7 +53,7 @@ void SortingTab::render(const int green) const { renderData(numbers, currentNumb
 void SortingTab::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    emit windowResizedSlot();
+    emit windowResizedSignal();
 }
 
 void SortingTab::shuffleNumbers() const

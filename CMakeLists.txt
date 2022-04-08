@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
         pathfindingtab.h
         pathfindingtab.cpp
         pathfindingtab.ui
+        cell.h
+        cell.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
