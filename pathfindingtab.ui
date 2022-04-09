@@ -51,7 +51,14 @@
           <number>5</number>
          </property>
          <property name="value">
-          <number>50</number>
+          <number>65</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="generateMazeButton">
+         <property name="text">
+          <string>Generate Maze</string>
          </property>
         </widget>
        </item>

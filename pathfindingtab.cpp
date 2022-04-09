@@ -17,6 +17,8 @@ PathfindingTab::PathfindingTab(QWidget *parent) :
     generateRandomStartAndEnd();
     calculateSizes();
     renderCells();
+
+
 }
 
 PathfindingTab::~PathfindingTab()
@@ -70,6 +72,9 @@ void PathfindingTab::calculateSizes() {
     centerOffsetX = (ui->pathfindingGraphicsView->size().width() - xSize*cellSideSize)/2;
     centerOffsetY = (ui->pathfindingGraphicsView->size().height() - ySize*cellSideSize)/2;
 }
+
+
+
 
 void PathfindingTab::renderCells() const
 {
@@ -167,11 +172,19 @@ void PathfindingTab::on_setEndButton_clicked()
 
 void PathfindingTab::on_runButton_clicked()
 {
+
     if (startCell == endCell) {
         qInfo() << "Please set different start and end";
     } else {
         //run
+
     }
+}
+
+
+void PathfindingTab::on_generateMazeButton_clicked()
+{
+    AldousBroder();
 }
 
 
@@ -179,9 +192,88 @@ void PathfindingTab::on_sizeXspinBox_valueChanged(int arg1)
 {
     xSize = arg1;
     ySize = xSize/2.05;
+    calculateSizes();
     populateCells();
     generateRandomStartAndEnd();
-    calculateSizes();
+    renderCells();
+}
+
+//Algorithms
+
+std::vector<std::unique_ptr<Cell> > PathfindingTab::getChildren(std::unique_ptr<Cell> &cell, cellState state) // default state unvisited
+{
+    std::vector<std::unique_ptr<Cell>> neighbourCells;
+
+
+    if (cell->getRow()>1 && cells[cell->getRow() -2][cell->getColumn()]->getState() == state) {
+        neighbourCells.push_back(std::make_unique<Cell>(this, cell->getRow() - 2, cell->getColumn()));
+    }
+    if (cell->getRow()< xSize - 2 && cells[cell->getRow() + 2][cell->getColumn()]->getState() == state) {
+        neighbourCells.push_back(std::make_unique<Cell>(this, cell->getRow() + 2, cell->getColumn()));
+    }
+    if (cell->getColumn()>1 && cells[cell->getRow()][cell->getColumn() - 2]->getState() == state) {
+        neighbourCells.push_back(std::make_unique<Cell>(this, cell->getRow(), cell->getColumn() - 2));
+    }
+    if (cell->getColumn()< ySize - 2 && cells[cell->getRow()][cell->getColumn() + 2]->getState() == state) {
+        neighbourCells.push_back(std::make_unique<Cell>(this, cell->getRow(), cell->getColumn() + 2));
+    }
+    auto rd = std::random_device {};
+    auto rng = std::default_random_engine { rd() };
+    std::shuffle(std::begin(neighbourCells), std::end(neighbourCells), rng);
+    return neighbourCells;
+}
+
+void PathfindingTab::populateAllWalls()
+{
+    for (auto &r : cells){
+        for (auto &c : r) {
+            c->setState(WALL);
+        }
+    }
+}
+
+void PathfindingTab::AldousBroder()
+{
+    populateAllWalls();
+    int currentRow = 1;
+    int currentCol = 1;
+    cells[currentRow][currentCol]->setState(UNVISITED);
+    int numVisited = 1;
+
+
+    qInfo() << ((xSize)/2) * ((ySize)/2);
+    while (numVisited < ((xSize)/2) * ((ySize)/2)) {
+        auto neighbours = getChildren(cells[currentRow][currentCol],WALL);
+
+        if (neighbours.size() > 0) {
+            std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+            renderCells();
+            l->processEvents();
+        }
+
+        if (neighbours.size() == 0) {
+            auto tempNeighbours = getChildren(cells[currentRow][currentCol]); // find unvisited
+//            int randomNeighbour = QRandomGenerator::global()->bounded(tempNeighbours.size());
+//            currentRow = tempNeighbours[randomNeighbour]->getRow(); // mark random neighbor as current
+//            currentCol = tempNeighbours[randomNeighbour]->getColumn(); // mark random neighbor as current
+            currentRow = tempNeighbours[0]->getRow(); // mark random neighbor as current
+            currentCol = tempNeighbours[0]->getColumn(); // mark random neighbor as current
+            continue;
+        }
+
+        for (auto &n : neighbours){
+            if (cells[n->getRow()][n->getColumn()]->getState() == WALL) {
+                cells[(n->getRow() + currentRow) / 2][(n->getColumn() + currentCol)/2]->setState(UNVISITED); // open up wall to new neighbor
+                cells[n->getRow()][n->getColumn()]->setState(UNVISITED); // mark neighbor as visited
+                numVisited++; // bump the number visited
+                currentRow = n->getRow(); //current becomes new neighbor
+                currentCol = n->getColumn(); //current becomes new neighbor
+                break; // break loop
+            }
+        }
+        qInfo() << numVisited;
+    }
+    qInfo() << "Done generating maze";
     renderCells();
 }
 

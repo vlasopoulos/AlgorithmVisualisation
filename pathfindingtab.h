@@ -9,6 +9,10 @@
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QRandomGenerator>
+
+#include <algorithm>
+#include <random>
+
 #include "cell.h"
 
 namespace Ui {
@@ -25,14 +29,12 @@ public:
 
 private slots:
     void windowResizedSlot();
-
     void on_setStartButton_clicked();
-
     void on_setEndButton_clicked();
-
     void on_runButton_clicked();
-
     void on_sizeXspinBox_valueChanged(int arg1);
+
+    void on_generateMazeButton_clicked();
 
 signals:
     void windowResizedSignal();
@@ -60,6 +62,11 @@ private:
     int cellSideSize;
     double centerOffsetX;
     double centerOffsetY;
+
+    //algorithms
+    void populateAllWalls();
+    std::vector<std::unique_ptr<Cell>> getChildren(std::unique_ptr<Cell> &cell, cellState state = UNVISITED);
+    void AldousBroder();
 };
 
 #endif // PATHFINDINGTAB_H
