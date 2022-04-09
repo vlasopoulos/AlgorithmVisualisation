@@ -11,7 +11,7 @@ PathfindingTab::PathfindingTab(QWidget *parent) :
     connect(this, &PathfindingTab::windowResizedSignal, this, &PathfindingTab::windowResizedSlot);
     pathfindingScene->installEventFilter(this);
 
-    xSize = 50;
+    xSize = 65;
     ySize = xSize/2.05;
     populateCells();
     generateRandomStartAndEnd();
@@ -253,9 +253,6 @@ void PathfindingTab::AldousBroder()
 
         if (neighbours.size() == 0) {
             auto tempNeighbours = getChildren(cells[currentRow][currentCol]); // find unvisited
-//            int randomNeighbour = QRandomGenerator::global()->bounded(tempNeighbours.size());
-//            currentRow = tempNeighbours[randomNeighbour]->getRow(); // mark random neighbor as current
-//            currentCol = tempNeighbours[randomNeighbour]->getColumn(); // mark random neighbor as current
             currentRow = tempNeighbours[0]->getRow(); // mark random neighbor as current
             currentCol = tempNeighbours[0]->getColumn(); // mark random neighbor as current
             continue;
