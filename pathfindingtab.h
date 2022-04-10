@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <random>
 
+#include "algorithmvisualisation.h"
 #include "cell.h"
 
 namespace Ui {
@@ -71,7 +72,7 @@ private:
 
     //algorithms
     void populateAllWalls();
-    std::vector<std::unique_ptr<Cell>> getChildren(std::unique_ptr<Cell> &cell, cellState state = UNVISITED);
+    std::vector<std::unique_ptr<Cell>> getChildrenForMaze(std::unique_ptr<Cell> &cell, cellState state = UNVISITED);
     void AldousBroder();
 };
 

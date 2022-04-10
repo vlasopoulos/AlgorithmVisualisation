@@ -227,7 +227,7 @@ void PathfindingTab::on_sizeXspinBox_valueChanged(int arg1)
 
 //Algorithms
 
-std::vector<std::unique_ptr<Cell> > PathfindingTab::getChildren(std::unique_ptr<Cell> &cell, cellState state) // default state unvisited
+std::vector<std::unique_ptr<Cell> > PathfindingTab::getChildrenForMaze(std::unique_ptr<Cell> &cell, cellState state) // default state unvisited
 {
     std::vector<std::unique_ptr<Cell>> neighbourCells;
 
@@ -270,7 +270,7 @@ void PathfindingTab::AldousBroder()
     int numVisited = 1;
 
     while (numVisited < ((xSize)/2) * ((ySize)/2)) {
-        auto neighbours = getChildren(cells[currentRow][currentCol],WALL);
+        auto neighbours = getChildrenForMaze(cells[currentRow][currentCol],WALL);
 
         if (generateMazeAnimation && neighbours.size() > 0) {
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
@@ -279,7 +279,7 @@ void PathfindingTab::AldousBroder()
         }
 
         if (neighbours.size() == 0) {
-            auto tempNeighbours = getChildren(cells[currentRow][currentCol]); // find unvisited
+            auto tempNeighbours = getChildrenForMaze(cells[currentRow][currentCol]); // find unvisited
             currentRow = tempNeighbours[0]->getRow(); // mark random neighbor as current
             currentCol = tempNeighbours[0]->getColumn(); // mark random neighbor as current
             continue;
