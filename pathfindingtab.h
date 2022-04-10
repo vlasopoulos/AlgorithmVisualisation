@@ -36,8 +36,11 @@ private slots:
 
     void on_generateMazeButton_clicked();
 
+    void on_animateMazeGenerationCheckBox_stateChanged(int arg1);
+
 signals:
     void windowResizedSignal();
+    void setStatusBarMessage(QString message, int timeout = 0);
 
 private:
     Ui::PathfindingTab *ui;
@@ -48,11 +51,14 @@ private:
     void renderCells() const;
     void resizeEvent(QResizeEvent *event);
     bool eventFilter(QObject *ob, QEvent *e);
+    void disableButtons();
+    void enableButtons();
 
     std::pair<int,int> startCell;
     std::pair<int,int> endCell;
     bool settingStartButton = false;
     bool settingEndButton = false;
+    bool generateMazeAnimation = true;
 
     //helpers
     int xSize;

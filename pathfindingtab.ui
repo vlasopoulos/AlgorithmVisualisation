@@ -20,6 +20,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="setStartButton">
+         <property name="toolTip">
+          <string>After clicking this button the next click inside the grid will set the Starting Cell.</string>
+         </property>
          <property name="text">
           <string>Set Start</string>
          </property>
@@ -27,13 +30,26 @@
        </item>
        <item>
         <widget class="QPushButton" name="setEndButton">
+         <property name="toolTip">
+          <string>After clicking this button the next click inside the grid will set the Target End Cell.</string>
+         </property>
          <property name="text">
           <string>Set End</string>
          </property>
         </widget>
        </item>
        <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>The X(horizontal) value of the grid. The Y(height) value is determined automatically.</string>
+         </property>
          <property name="text">
           <string>Horizontal nodes:</string>
          </property>
@@ -41,6 +57,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="sizeXspinBox">
+         <property name="toolTip">
+          <string>The X(horizontal) value of the grid. The Y(height) value is determined automatically.</string>
+         </property>
          <property name="minimum">
           <number>10</number>
          </property>
@@ -56,9 +75,39 @@
         </widget>
        </item>
        <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="generateMazeButton">
          <property name="text">
           <string>Generate Maze</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="animateMazeGenerationCheckBox">
+         <property name="toolTip">
+          <string>Toggle Animation during maze generation</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="text">
+          <string>Animate:</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>

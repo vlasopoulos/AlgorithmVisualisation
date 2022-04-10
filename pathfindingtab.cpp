@@ -18,7 +18,6 @@ PathfindingTab::PathfindingTab(QWidget *parent) :
     calculateSizes();
     renderCells();
 
-
 }
 
 PathfindingTab::~PathfindingTab()
@@ -63,14 +62,21 @@ void PathfindingTab::generateRandomStartAndEnd()
     if (startCell == endCell) {
         generateRandomStartAndEnd();
     }
-    qInfo() << startCell << endCell;
 }
 
 void PathfindingTab::calculateSizes() {
-    width = ui->pathfindingGraphicsView->size().width();
-    cellSideSize = width/xSize;
-    centerOffsetX = (ui->pathfindingGraphicsView->size().width() - xSize*cellSideSize)/2;
-    centerOffsetY = (ui->pathfindingGraphicsView->size().height() - ySize*cellSideSize)/2;
+//    width = ui->pathfindingGraphicsView->size().width();
+    width = pathfindingScene->width();
+//    cellSideSize = width/xSize;
+    cellSideSize = pathfindingScene->height()/ySize;
+    if (cellSideSize*xSize>width){
+        cellSideSize = pathfindingScene->width()/xSize;
+    }
+//    cellSideSize = ui->pathfindingGraphicsView->size().height()/ySize;
+//    centerOffsetX = (ui->pathfindingGraphicsView->size().width() - xSize*cellSideSize)/2;
+//    centerOffsetY = (ui->pathfindingGraphicsView->size().height() - ySize*cellSideSize)/2;
+    centerOffsetX = (pathfindingScene->width() - xSize*cellSideSize)/2;
+    centerOffsetY = (pathfindingScene->height() - ySize*cellSideSize)/2;
 }
 
 
@@ -151,7 +157,28 @@ bool PathfindingTab::eventFilter(QObject *ob, QEvent *e)
              }
          }
     }
-    return false;
+     return false;
+}
+
+void PathfindingTab::disableButtons()
+{
+    ui->setEndButton->setDisabled(true);
+    ui->setStartButton->setDisabled(true);
+    ui->sizeXspinBox->setDisabled(true);
+    ui->generateMazeButton->setDisabled(true);
+    ui->runButton->setDisabled(true);
+    pathfindingScene->removeEventFilter(this);
+
+}
+
+void PathfindingTab::enableButtons()
+{
+    ui->setEndButton->setDisabled(false);
+    ui->setStartButton->setDisabled(false);
+    ui->sizeXspinBox->setDisabled(false);
+    ui->generateMazeButton->setDisabled(false);
+    ui->runButton->setDisabled(false);
+    pathfindingScene->installEventFilter(this);
 }
 
 
@@ -234,18 +261,18 @@ void PathfindingTab::populateAllWalls()
 
 void PathfindingTab::AldousBroder()
 {
+    disableButtons();
+    emit setStatusBarMessage("Generating maze...");
     populateAllWalls();
     int currentRow = 1;
     int currentCol = 1;
     cells[currentRow][currentCol]->setState(UNVISITED);
     int numVisited = 1;
 
-
-    qInfo() << ((xSize)/2) * ((ySize)/2);
     while (numVisited < ((xSize)/2) * ((ySize)/2)) {
         auto neighbours = getChildren(cells[currentRow][currentCol],WALL);
 
-        if (neighbours.size() > 0) {
+        if (generateMazeAnimation && neighbours.size() > 0) {
             std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
             renderCells();
             l->processEvents();
@@ -268,9 +295,39 @@ void PathfindingTab::AldousBroder()
                 break; // break loop
             }
         }
-        qInfo() << numVisited;
     }
-    qInfo() << "Done generating maze";
+    cells[1][1]->setState(START);
+    startCell = std::make_pair(1,1);
+    if (cells[xSize-1][ySize-1]->getState() == UNVISITED) {
+        cells[xSize-1][ySize-1]->setState(END);
+        endCell = std::make_pair(xSize-1, ySize-1);
+    }
+    else if (cells[xSize-1][ySize-2]->getState() == UNVISITED) {
+        cells[xSize-1][ySize-2]->setState(END);
+        endCell = std::make_pair(xSize-1, ySize-2);
+    }
+    else if (cells[xSize-2][ySize-1]->getState() == UNVISITED) {
+        cells[xSize-2][ySize-1]->setState(END);
+        endCell = std::make_pair(xSize-2, ySize-1);
+    }
+    else if (cells[xSize-2][ySize-2]->getState() == UNVISITED) {
+        cells[xSize-2][ySize-2]->setState(END);
+        endCell = std::make_pair(xSize-2, ySize-2);
+    }
+    emit setStatusBarMessage("Maze generated succesfully.");
     renderCells();
+    enableButtons();
+}
+
+
+void PathfindingTab::on_animateMazeGenerationCheckBox_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        generateMazeAnimation = false;
+    } else if (arg1 == 1) {
+        generateMazeAnimation = true;
+    } else {
+        generateMazeAnimation = true;
+    }
 }
 

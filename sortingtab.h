@@ -41,6 +41,7 @@ private slots:
 
 signals:
     void windowResizedSignal();
+    void setStatusBarMessage(QString message, int timeout = 0);
 
 private:
     Ui::SortingTab *ui;
@@ -53,6 +54,9 @@ private:
     QColor getIdealTextColor(const QColor& rBackgroundColor) const;
     void generateLinearDistribution();
     void generateRandomDistribution();
+    void disableButtons();
+    void enableButtons();
+
     //sorting
     void swap(int *a, int *b);
     int quickSortPartition(int *arr, const int low, const int high);

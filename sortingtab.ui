@@ -79,6 +79,9 @@
        </item>
        <item>
         <widget class="QLabel" name="numberOfItemsLabel">
+         <property name="toolTip">
+          <string>The number of columns to be sorted.</string>
+         </property>
          <property name="text">
           <string>Number of items:</string>
          </property>
@@ -86,6 +89,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="numberOfItemsSpinBox">
+         <property name="toolTip">
+          <string>The number of columns to be sorted.</string>
+         </property>
          <property name="minimum">
           <number>2</number>
          </property>
@@ -109,6 +115,9 @@
        </item>
        <item>
         <widget class="QLabel" name="label">
+         <property name="toolTip">
+          <string>Whether the generated columns increment with a steady rate(Linear) or are generated at random(Random).</string>
+         </property>
          <property name="text">
           <string>Distribution:</string>
          </property>
@@ -116,6 +125,9 @@
        </item>
        <item>
         <widget class="QComboBox" name="distributionComboBox">
+         <property name="toolTip">
+          <string>Whether the generated columns increment with a steady rate(Linear) or are generated at random(Random).</string>
+         </property>
          <item>
           <property name="text">
            <string>Linear</string>
@@ -150,6 +162,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="shuffleButton">
+         <property name="toolTip">
+          <string>Shuffle the current distribution of columns.</string>
+         </property>
          <property name="text">
           <string>Shuffle</string>
          </property>
@@ -177,6 +192,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Change the background color.</string>
+         </property>
          <property name="text">
           <string>Background Color</string>
          </property>
@@ -184,6 +202,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="columnColorButton">
+         <property name="toolTip">
+          <string>Change the column color.</string>
+         </property>
          <property name="text">
           <string>Column Color</string>
          </property>
@@ -191,6 +212,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="highlightColorButton">
+         <property name="toolTip">
+          <string>Change the highlight color. The highlight color is the color of the column that is currently being processed by the algorithm.</string>
+         </property>
          <property name="text">
           <string>Highlight Color</string>
          </property>
@@ -198,6 +222,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="resetColorsButton">
+         <property name="toolTip">
+          <string>Reset all colors to default values.</string>
+         </property>
          <property name="text">
           <string>Reset Colors</string>
          </property>

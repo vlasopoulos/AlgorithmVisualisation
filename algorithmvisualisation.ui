@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="SortingTab" name="widget" native="true"/>
+         <widget class="SortingTab" name="sortingTab" native="true"/>
         </item>
        </layout>
       </widget>
@@ -36,7 +36,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="PathfindingTab" name="widget_2" native="true"/>
+         <widget class="PathfindingTab" name="pathfindingTab" native="true"/>
         </item>
        </layout>
       </widget>

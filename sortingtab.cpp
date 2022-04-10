@@ -64,35 +64,42 @@ void SortingTab::shuffleNumbers() const
 
 void SortingTab::on_runSortingAlgorithmButton_clicked()
 {
-    ui->runSortingAlgorithmButton->setDisabled(true);
-    ui->shuffleButton->setDisabled(true);
+    disableButtons();
+
     switch (ui->selectedSortingAlgorithmComboBox->currentIndex()) {
         case 0:
+            emit setStatusBarMessage("Running Quick Sort algorithm.");
             quickSort(numbers,0,currentNumberOfItems-1);
         break;
         case 1:
+        emit setStatusBarMessage("Running Merge Sort algorithm.");
             mergeSort(numbers,0,currentNumberOfItems-1);
         break;
         case 2:
+        emit setStatusBarMessage("Running Bubble Sort algorithm.");
             bubbleSort(numbers,currentNumberOfItems);
         break;
         case 3:
+        emit setStatusBarMessage("Running Selection Sort algorithm.");
             selectionSort(numbers,currentNumberOfItems);
         break;
         case 4:
+        emit setStatusBarMessage("Running Insertion Sort algorithm.");
             insertionSort(numbers,currentNumberOfItems);
         break;
         case 5:
+        emit setStatusBarMessage("Running Radix Sort algorithm.");
             radixSort(numbers,currentNumberOfItems);
         break;
         case 6:
+        emit setStatusBarMessage("Running Cocktail Sort algorithm.");
             cocktailSort(numbers,currentNumberOfItems);
         break;
     }
     qInfo() << "done";
+    emit setStatusBarMessage("Sorting Algorithm finished.");
 
-    ui->runSortingAlgorithmButton->setDisabled(false);
-    ui->shuffleButton->setDisabled(false);
+    enableButtons();
     render();
 }
 
@@ -208,6 +215,24 @@ void SortingTab::generateRandomDistribution()
         numbers[i] = distr(rng);
     }
     render();
+}
+
+void SortingTab::disableButtons()
+{
+    ui->selectedSortingAlgorithmComboBox->setDisabled(true);
+    ui->numberOfItemsSpinBox->setDisabled(true);
+    ui->distributionComboBox->setDisabled(true);
+    ui->shuffleButton->setDisabled(true);
+    ui->runSortingAlgorithmButton->setDisabled(true);
+}
+
+void SortingTab::enableButtons()
+{
+    ui->selectedSortingAlgorithmComboBox->setDisabled(false);
+    ui->numberOfItemsSpinBox->setDisabled(false);
+    ui->distributionComboBox->setDisabled(false);
+    ui->shuffleButton->setDisabled(false);
+    ui->runSortingAlgorithmButton->setDisabled(false);
 }
 
 //void SortingTab::on_pushButton_clicked() const
