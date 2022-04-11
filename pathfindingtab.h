@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <random>
+#include <set>
 
 #include "algorithmvisualisation.h"
 #include "cell.h"
@@ -74,6 +75,20 @@ private:
     void populateAllWalls();
     std::vector<std::unique_ptr<Cell>> getChildrenForMaze(std::unique_ptr<Cell> &cell, cellState state = UNVISITED);
     void AldousBroder();
+    //A*
+    struct Node {
+        uint G;
+        double H;
+        std::pair<int,int> coordinates;
+        std::shared_ptr<Node> parent;
+        Node(std::pair<int,int> coordinates, std::shared_ptr<Node> parent = nullptr);
+        bool operator > ( const Node n) const;
+    };
+    std::shared_ptr<Node> Astar(std::shared_ptr<Node> &initialNode);
+    std::vector<std::shared_ptr<Node>> getChildrenForAStar(std::shared_ptr<Node> &node);
+    double calculateHeuristic(std::shared_ptr<Node> &node);
+    static bool compareNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2);
+    void findPath(std::shared_ptr<Node> &endNode);
 };
 
 #endif // PATHFINDINGTAB_H

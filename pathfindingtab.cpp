@@ -95,6 +95,10 @@ void PathfindingTab::renderCells() const
                 backgroundBrush.setColor(Qt::red);
             } else if (cells[row][col]->getState() == WALL) {
                 backgroundBrush.setColor(Qt::black);
+            } else if (cells[row][col]->getState() == VISITED) {
+                backgroundBrush.setColor(Qt::yellow);
+            } else if (cells[row][col]->getState() == PATH) {
+                backgroundBrush.setColor(Qt::magenta);
             } else {
                 backgroundBrush.setColor(Qt::white);
             }
@@ -204,7 +208,11 @@ void PathfindingTab::on_runButton_clicked()
         qInfo() << "Please set different start and end";
     } else {
         //run
-
+        std::shared_ptr<Node> startingNode = std::make_shared<Node>(startCell,nullptr);
+        auto endNode = Astar(startingNode);
+        renderCells();
+        findPath(endNode);
+        renderCells();
     }
 }
 
@@ -223,6 +231,17 @@ void PathfindingTab::on_sizeXspinBox_valueChanged(int arg1)
     populateCells();
     generateRandomStartAndEnd();
     renderCells();
+}
+
+void PathfindingTab::on_animateMazeGenerationCheckBox_stateChanged(int arg1)
+{
+    if (arg1 == 0) {
+        generateMazeAnimation = false;
+    } else if (arg1 == 1) {
+        generateMazeAnimation = true;
+    } else {
+        generateMazeAnimation = true;
+    }
 }
 
 //Algorithms
@@ -319,15 +338,95 @@ void PathfindingTab::AldousBroder()
     enableButtons();
 }
 
+//A*
 
-void PathfindingTab::on_animateMazeGenerationCheckBox_stateChanged(int arg1)
+PathfindingTab::Node::Node(std::pair<int,int> coordinates, std::shared_ptr<Node> parent)
 {
-    if (arg1 == 0) {
-        generateMazeAnimation = false;
-    } else if (arg1 == 1) {
-        generateMazeAnimation = true;
-    } else {
-        generateMazeAnimation = true;
+    G = 0;
+    H = 0;
+    this->coordinates = coordinates;
+    this->parent = parent;
+}
+
+bool PathfindingTab::Node::operator > (const Node n) const
+{
+    return H > n.H;
+}
+
+std::shared_ptr<PathfindingTab::Node> PathfindingTab::Astar(std::shared_ptr<Node> &initialNode)
+{
+    std::list<std::shared_ptr<Node>> frontier;
+
+    if (initialNode->coordinates == endCell) return initialNode; // if is final state
+    frontier.push_back(initialNode);
+
+    while (frontier.size() > 0) {
+        std::shared_ptr<Node> currentNode = frontier.front();
+        if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != START && cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END && cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != VISITED){
+            cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(VISITED);
+            std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+            renderCells();
+            l->processEvents();
+        }
+        frontier.remove(currentNode);
+        if (currentNode->coordinates == endCell) return currentNode; // if is final state
+        auto children = getChildrenForAStar(currentNode);
+        for (auto c : children){
+            if (std::find(frontier.begin(),frontier.end(),c) == frontier.end()){
+                frontier.push_back(c);
+            }
+        }
+        frontier.sort(compareNodes);
     }
+    return nullptr;
+}
+
+std::vector<std::shared_ptr<PathfindingTab::Node>> PathfindingTab::getChildrenForAStar(std::shared_ptr<Node> &node)
+{
+    std::vector<std::shared_ptr<PathfindingTab::Node>> children;
+    if (node->coordinates.first - 1 > -1 && cells[node->coordinates.first - 1][node->coordinates.second]->getState() != WALL && cells[node->coordinates.first - 1][node->coordinates.second]->getState() != VISITED && cells[node->coordinates.first - 1][node->coordinates.second]->getState() != START) {
+        children.push_back(std::make_shared<Node>(std::make_pair(node->coordinates.first-1,node->coordinates.second),node));
+    }
+    if (node->coordinates.second - 1 > -1 && cells[node->coordinates.first][node->coordinates.second - 1]->getState() != WALL && cells[node->coordinates.first][node->coordinates.second - 1]->getState() != VISITED && cells[node->coordinates.first][node->coordinates.second - 1]->getState() != START) {
+        children.push_back(std::make_shared<Node>(std::make_pair(node->coordinates.first,node->coordinates.second - 1),node));
+    }
+    if (node->coordinates.first + 1 < xSize && cells[node->coordinates.first + 1][node->coordinates.second]->getState() != WALL && cells[node->coordinates.first + 1][node->coordinates.second]->getState() != VISITED && cells[node->coordinates.first + 1][node->coordinates.second]->getState() != START) {
+        children.push_back(std::make_shared<Node>(std::make_pair(node->coordinates.first + 1,node->coordinates.second),node));
+    }
+    if (node->coordinates.second + 1 < ySize && cells[node->coordinates.first][node->coordinates.second + 1]->getState() != WALL && cells[node->coordinates.first][node->coordinates.second + 1]->getState() != VISITED && cells[node->coordinates.first][node->coordinates.second + 1]->getState() != START) {
+        children.push_back(std::make_shared<Node>(std::make_pair(node->coordinates.first,node->coordinates.second + 1),node));
+    }
+    for (auto n : children) {
+        n->G = node->G +1;
+        n->H = calculateHeuristic(n) + n->G;
+    }
+    return children;
+}
+
+double PathfindingTab::calculateHeuristic(std::shared_ptr<Node> &node)
+{
+    //Euclidean
+    return sqrt( pow(( endCell.first - node->coordinates.first),2) + pow((endCell.second - node->coordinates.second),2) )*5; // times 5 to be bigger than G
+}
+
+bool PathfindingTab::compareNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
+{
+    return (node1->H < node2->H);
+}
+
+void PathfindingTab::findPath(std::shared_ptr<Node> &endNode)
+{
+    auto currentNode = endNode;
+ if (currentNode == nullptr) emit setStatusBarMessage("Path not found!");
+ else {
+     while (currentNode->parent != nullptr) {
+         if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END) cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(PATH);
+         currentNode = currentNode->parent;
+         std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+         renderCells();
+         l->processEvents();
+     }
+     emit setStatusBarMessage("Found Path!");
+ }
 }
 
