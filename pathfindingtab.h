@@ -83,7 +83,6 @@ private:
         std::pair<int,int> coordinates;
         std::shared_ptr<Node> parent;
         Node(std::pair<int,int> coordinates, std::shared_ptr<Node> parent = nullptr);
-        bool operator > ( const Node n) const;
     };
     std::shared_ptr<Node> Astar(std::shared_ptr<Node> &initialNode);
     std::vector<std::shared_ptr<Node>> getChildrenForAStar(std::shared_ptr<Node> &node);

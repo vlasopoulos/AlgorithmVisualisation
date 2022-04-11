@@ -37,13 +37,11 @@ void PathfindingTab::populateCells()
     //clear vectors
     cells.clear();
 
-    //calculate appropriate height
-
     //populate cells
-    for (int r=0; r<xSize ; r++ ) {
+    for (int row=0; row<xSize ; row++ ) {
         std::vector<std::unique_ptr<Cell>> column;
         for (int col=0; col<ySize; col++) {
-            column.push_back(std::make_unique<Cell>(this, r, col));
+            column.push_back(std::make_unique<Cell>(this, row, col));
         }
         cells.push_back(std::move(column));
     }
@@ -64,17 +62,13 @@ void PathfindingTab::generateRandomStartAndEnd()
     }
 }
 
-void PathfindingTab::calculateSizes() {
-//    width = ui->pathfindingGraphicsView->size().width();
+void PathfindingTab::calculateSizes()
+{
     width = pathfindingScene->width();
-//    cellSideSize = width/xSize;
     cellSideSize = pathfindingScene->height()/ySize;
     if (cellSideSize*xSize>width){
         cellSideSize = pathfindingScene->width()/xSize;
     }
-//    cellSideSize = ui->pathfindingGraphicsView->size().height()/ySize;
-//    centerOffsetX = (ui->pathfindingGraphicsView->size().width() - xSize*cellSideSize)/2;
-//    centerOffsetY = (ui->pathfindingGraphicsView->size().height() - ySize*cellSideSize)/2;
     centerOffsetX = (pathfindingScene->width() - xSize*cellSideSize)/2;
     centerOffsetY = (pathfindingScene->height() - ySize*cellSideSize)/2;
 }
@@ -368,11 +362,6 @@ PathfindingTab::Node::Node(std::pair<int,int> coordinates, std::shared_ptr<Node>
     this->parent = parent;
 }
 
-bool PathfindingTab::Node::operator > (const Node n) const
-{
-    return H > n.H;
-}
-
 std::shared_ptr<PathfindingTab::Node> PathfindingTab::Astar(std::shared_ptr<Node> &initialNode)
 {
     std::list<std::shared_ptr<Node>> frontier;
@@ -418,7 +407,7 @@ std::vector<std::shared_ptr<PathfindingTab::Node>> PathfindingTab::getChildrenFo
     }
     for (auto n : children) {
         n->G = node->G +1;
-        n->H = calculateHeuristic(n) + n->G;
+        n->H = calculateHeuristic(n);
     }
     return children;
 }
@@ -431,18 +420,18 @@ double PathfindingTab::calculateHeuristic(std::shared_ptr<Node> &node)
 
 bool PathfindingTab::compareNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
 {
-    return (node1->H < node2->H);
+    return ((node1->H + node1->G) < (node2->H + node2->G));
 }
 
 void PathfindingTab::findPath(std::shared_ptr<Node> &endNode)
 {
     auto currentNode = endNode;
     while (currentNode->parent != nullptr) {
-     if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END) cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(PATH);
-     currentNode = currentNode->parent;
-     std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
-     renderCells();
-     l->processEvents();
-    }
+        if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END) cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(PATH);
+        currentNode = currentNode->parent;
+        std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+        renderCells();
+        l->processEvents();
+     }
 }
 
