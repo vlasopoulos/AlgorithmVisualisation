@@ -203,7 +203,9 @@ void PathfindingTab::on_setEndButton_clicked()
 
 void PathfindingTab::on_runButton_clicked()
 {
-
+    disableButtons();
+    clearPathAndVisited();
+    emit setStatusBarMessage("Searching for path.");
     if (startCell == endCell) {
         qInfo() << "Please set different start and end";
     } else {
@@ -211,8 +213,26 @@ void PathfindingTab::on_runButton_clicked()
         std::shared_ptr<Node> startingNode = std::make_shared<Node>(startCell,nullptr);
         auto endNode = Astar(startingNode);
         renderCells();
-        findPath(endNode);
+        if (endNode != nullptr){
+            emit setStatusBarMessage("Found path!");
+            findPath(endNode);
+        } else {
+            emit setStatusBarMessage("Path not found!");
+        }
         renderCells();
+    }
+    enableButtons();
+}
+
+
+void PathfindingTab::clearPathAndVisited()
+{
+    for (int i=0; i<xSize; i++ ) {
+        for (int j=0; j<ySize; j++) {
+            if (cells[i][j]->getState() == VISITED || cells[i][j]->getState() == PATH) {
+                cells[i][j]->setState(UNVISITED);
+            }
+        }
     }
 }
 
@@ -371,7 +391,7 @@ std::shared_ptr<PathfindingTab::Node> PathfindingTab::Astar(std::shared_ptr<Node
         frontier.remove(currentNode);
         if (currentNode->coordinates == endCell) return currentNode; // if is final state
         auto children = getChildrenForAStar(currentNode);
-        for (auto c : children){
+        for (auto &c : children){
             if (std::find(frontier.begin(),frontier.end(),c) == frontier.end()){
                 frontier.push_back(c);
             }
@@ -406,7 +426,7 @@ std::vector<std::shared_ptr<PathfindingTab::Node>> PathfindingTab::getChildrenFo
 double PathfindingTab::calculateHeuristic(std::shared_ptr<Node> &node)
 {
     //Euclidean
-    return sqrt( pow(( endCell.first - node->coordinates.first),2) + pow((endCell.second - node->coordinates.second),2) )*5; // times 5 to be bigger than G
+    return sqrt( pow(( endCell.first - node->coordinates.first),2) + pow((endCell.second - node->coordinates.second),2) )*10; // times 10 to be bigger than G
 }
 
 bool PathfindingTab::compareNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
@@ -417,16 +437,12 @@ bool PathfindingTab::compareNodes(const std::shared_ptr<Node> &node1, const std:
 void PathfindingTab::findPath(std::shared_ptr<Node> &endNode)
 {
     auto currentNode = endNode;
- if (currentNode == nullptr) emit setStatusBarMessage("Path not found!");
- else {
-     while (currentNode->parent != nullptr) {
-         if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END) cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(PATH);
-         currentNode = currentNode->parent;
-         std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
-         renderCells();
-         l->processEvents();
-     }
-     emit setStatusBarMessage("Found Path!");
- }
+    while (currentNode->parent != nullptr) {
+     if (cells[currentNode->coordinates.first][currentNode->coordinates.second]->getState() != END) cells[currentNode->coordinates.first][currentNode->coordinates.second]->setState(PATH);
+     currentNode = currentNode->parent;
+     std::unique_ptr<QEventLoop> l = std::make_unique<QEventLoop>();
+     renderCells();
+     l->processEvents();
+    }
 }
 

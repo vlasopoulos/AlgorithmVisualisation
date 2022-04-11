@@ -55,6 +55,7 @@ private:
     bool eventFilter(QObject *ob, QEvent *e);
     void disableButtons();
     void enableButtons();
+    void clearPathAndVisited();
 
     std::pair<int,int> startCell;
     std::pair<int,int> endCell;
